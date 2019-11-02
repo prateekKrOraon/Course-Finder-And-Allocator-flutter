@@ -1,4 +1,4 @@
-# course_finder
+# Course Finser And Allocator
 
 Find the best courses for you
 
