@@ -10,6 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class InputUserDetail extends StatefulWidget{
 
+  InputUserDetail({this.email});
+  final String email;
+
   @override
   _InputUserDetailState createState() => _InputUserDetailState();
 }
@@ -28,7 +31,7 @@ class _InputUserDetailState extends State<InputUserDetail>{
 
   saveToSharedPref(bool filledDetails)async{
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(kFilledDetails, true);
+    await prefs.setBool(widget.email, true);
   }
 
   _selectDate(BuildContext context) async {

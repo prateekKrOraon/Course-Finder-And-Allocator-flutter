@@ -1,8 +1,7 @@
+import 'package:course_finder/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'constants.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:outline_material_icons/outline_material_icons.dart';
 
 class InputTextField extends StatelessWidget{
 
@@ -606,8 +605,9 @@ class QuickFacts extends StatelessWidget{
 
 class CustomDashboardChips extends StatelessWidget{
 
-  CustomDashboardChips({this.text});
+  CustomDashboardChips({this.text,this.userId});
   final String text;
+  final int userId;
   @override
   Widget build(BuildContext context) {
     return FlatButton(
@@ -628,7 +628,8 @@ class CustomDashboardChips extends StatelessWidget{
         ),
       ),
       onPressed: (){
-        print(text);//TODO
+        //TODO
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home(screenNumber: 1,searchData: text,userId: userId,)));
       },
     );
   }
@@ -711,7 +712,7 @@ class AboutTile extends StatelessWidget{
           ),
         ],
       ),
-    );;
+    );
   }
 
 }

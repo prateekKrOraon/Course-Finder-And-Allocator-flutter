@@ -25,9 +25,9 @@ class _SignUpScreenState extends State<SignUpScreen>{
 
   NetworkHandler networkHandler = NetworkHandler();
 
-  saveToSharedPref(bool loggedIn)async{
+  saveToSharedPref(String email)async{
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(kLoggedIn, true);
+    await prefs.setString(kEmailId, kEmailId);
   }
 
   @override
@@ -97,8 +97,8 @@ class _SignUpScreenState extends State<SignUpScreen>{
                       }else{
                         _responseBody = await networkHandler.signUpUser(_email, _password);
                         if(!_responseBody[kError]){
-                          await saveToSharedPref(true);
-                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>InputUserDetail()),(route)=>false);
+                          await saveToSharedPref(_email);
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>InputUserDetail(email:_email,)),(route)=>false);
                         }else{
                           setState(() {
                             showSpinner = false;

@@ -1,3 +1,4 @@
+import 'package:course_finder/screens/course_info_screen.dart';
 import 'package:course_finder/services/network_handler.dart';
 import 'package:course_finder/utilities/constants.dart';
 import 'package:course_finder/utilities/custom_widgets.dart';
@@ -5,6 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget{
+
+  Dashboard({this.userId});
+  final int userId;
+
   @override
   _DashboardState createState() {
     return _DashboardState();
@@ -14,6 +19,7 @@ class Dashboard extends StatefulWidget{
 class _DashboardState extends State<Dashboard>{
 
   PageController _pageController;
+  int _userId;
 
   _itemSelector(int index,List<ResultTile> tile,List images){
     return AnimatedBuilder(
@@ -49,58 +55,11 @@ class _DashboardState extends State<Dashboard>{
     return await networkHandler.getPageViewItems(qual);
   }
 
-  List<CustomDashboardChips> courseButtons = [
-    CustomDashboardChips(
-      text: 'B.Tech.',
-    ),
-    CustomDashboardChips(
-      text: 'M.Tech.',
 
-    ),
-    CustomDashboardChips(
-      text: 'M.Sc.',
-    ),
-    CustomDashboardChips(
-      text: 'B.Sc.',
-    ),
-    CustomDashboardChips(
-      text: 'MBBS',
-    ),
-  ];
-
-  List<CustomDashboardTile> instituteList = [
-    CustomDashboardTile(
-      text: 'NITs',
-    ),
-    CustomDashboardTile(
-      text: 'IITs',
-    ),
-    CustomDashboardTile(
-      text: 'IIMs',
-    ),
-    CustomDashboardTile(
-      text: 'AIIMS',
-    ),
-  ];
-
-  List<CustomDashboardChips> examButtons = [
-    CustomDashboardChips(
-      text: 'JEE Mains.',
-    ),
-    CustomDashboardChips(
-      text: 'JEE Advance',
-
-    ),
-    CustomDashboardChips(
-      text: 'NEET',
-    ),
-    CustomDashboardChips(
-      text: 'GATE',
-    ),
-  ];
 
   void initState() {
     super.initState();
+    _userId = widget.userId;
     networkHandler = NetworkHandler();
     _pageController = PageController(initialPage: 0, viewportFraction: 0.9);
     _pageViewItems = _getPageViewItems('Intermediate');
@@ -108,185 +67,290 @@ class _DashboardState extends State<Dashboard>{
 
   @override
   Widget build(BuildContext context) {
+
+    List<CustomDashboardChips> courseButtons = [
+      CustomDashboardChips(
+        text: 'B.Tech.',
+        userId: _userId,
+      ),
+      CustomDashboardChips(
+        text: 'M.Tech.',
+        userId: _userId,
+      ),
+      CustomDashboardChips(
+        text: 'M.Sc.',
+        userId: _userId,
+      ),
+      CustomDashboardChips(
+        text: 'B.Sc.',
+      ),
+      CustomDashboardChips(
+        text: 'MBBS',
+        userId: _userId,
+      ),
+    ];
+
+    List<CustomDashboardTile> instituteList = [
+      CustomDashboardTile(
+        text: 'NITs',
+      ),
+      CustomDashboardTile(
+        text: 'IITs',
+      ),
+      CustomDashboardTile(
+        text: 'IIMs',
+      ),
+      CustomDashboardTile(
+        text: 'AIIMS',
+      ),
+    ];
+
+    List<CustomDashboardChips> examButtons = [
+      CustomDashboardChips(
+        text: 'JEE Mains.',
+        userId: _userId,
+      ),
+      CustomDashboardChips(
+        text: 'JEE Advance',
+        userId: _userId,
+      ),
+      CustomDashboardChips(
+        text: 'NEET',
+        userId: _userId,
+      ),
+      CustomDashboardChips(
+        text: 'GATE',
+        userId: _userId,
+      ),
+    ];
+
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 4.0),
+      //padding: EdgeInsets.symmetric(horizontal: 4.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SizedBox(height: 10.0,),
-          Text(
-            'Recommedations',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-                fontFamily: kQuicksand,
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15.0,horizontal: 10.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(35.0),
+                bottomLeft: Radius.circular(35.0),
+              ),
             ),
-          ),
-          FutureBuilder(
-            future: _pageViewItems,
-            builder: (context,snapshot){
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(child: CircularProgressIndicator(),);
-              }
-              if(!snapshot.hasData){
-                return Center(child: CircularProgressIndicator(),);
-              }
-
-              List list = snapshot.data;
-              List<ResultTile> resultList = [];
-              List imageLinks = [];
-              for(Map item in list){
-                resultList.add(ResultTile(
-                  courseName: item[kCourseName],
-                  courseId: item[kCourseId],
-                  showCourse: true,
-                  collegeId: item[kCollegeId],
-                  collegeName: item[kCollegeName],
-                  iconLink: item[kCollegeIconLink],
-                  location: item[kCollegeName],
-                ));
-                imageLinks.add(item[kCollegeImageLink]);
-              }
-
-              return Column(
-                children: <Widget>[
-                  Container(
-                    height: 150,
-                    child: PageView.builder(
-                      scrollDirection: Axis.horizontal,
-                      controller: _pageController,
-                      itemCount: resultList.length,
-                      itemBuilder: (BuildContext context, index){
-                        return _itemSelector(index,resultList,imageLinks);
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-          Card(
-            elevation: 2.0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
-                    child: Text(
-                      'Courses',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontFamily: kQuicksand,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0
-                      ),
-                    ),
-                  ),
-                  Divider(color: Theme.of(context).accentColor,height: 1.0,),
-                  GridView.builder(
-                    controller: ScrollController(
-                      keepScrollOffset: false,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: courseButtons.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 2.5,
-                    ),
-                    itemBuilder: (BuildContext context, int index){
-                      return Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: courseButtons[index],
-                      );
-                    },
-                  ),
-                ],
+            child: Center(
+              child: Text(
+                'Home',
+                style: TextStyle(
+                  fontFamily: kQuicksand,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-          Card(
-            elevation: 2.0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
-                    child: Text(
-                      'Institutes',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontFamily: kQuicksand,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0
-                      ),
-                    ),
-                  ),
-                  Divider(color: Theme.of(context).accentColor,height: 1.0,),
-                  GridView.builder(
-                    controller: ScrollController(
-                      keepScrollOffset: false,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: instituteList.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 1),
-                    itemBuilder: (BuildContext context,int index){
-                      return Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: instituteList[index],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Card(
-            elevation: 2.0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
-                    child: Text(
-                      'Exams',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontFamily: kQuicksand,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0
-                      ),
-                    ),
-                  ),
-                  Divider(color: Theme.of(context).accentColor,height: 1.0,),
-                  GridView.builder(
-                    controller: ScrollController(
-                      keepScrollOffset: false,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: examButtons.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 2,
-                    ),
-                    itemBuilder: (BuildContext context, int index){
-                      return Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: examButtons[index],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                FutureBuilder(
+                  future: _pageViewItems,
+                  builder: (context,snapshot){
+                    if(snapshot.hasError){
+                      return SizedBox(height: 10.0,);
+                    }
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      return Center(child: CircularProgressIndicator(),);
+                    }
+                    if(!snapshot.hasData){
+                      return Center(child: CircularProgressIndicator(),);
+                    }
 
+
+                    List list = snapshot.data;
+                    List<ResultTile> resultList = [];
+                    List imageLinks = [];
+                    for(Map item in list){
+                      resultList.add(
+                        ResultTile(
+                          courseName: item[kCourseName],
+                          courseId: item[kCourseId],
+                          showCourse: true,
+                          collegeId: item[kCollegeId],
+                          collegeName: item[kCollegeName],
+                          iconLink: item[kCollegeIconLink],
+                          location: item[kCollegeName],
+                        ),
+                      );
+                      imageLinks.add(item[kCollegeImageLink]);
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 10.0,),
+                        Text(
+                          'Recommedations',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontFamily: kQuicksand,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0
+                          ),
+                        ),
+                        Container(
+                          height: 150,
+                          child: PageView.builder(
+                            scrollDirection: Axis.horizontal,
+                            controller: _pageController,
+                            itemCount: resultList.length,
+                            itemBuilder: (BuildContext context, index){
+                              return GestureDetector(
+                                child: _itemSelector(index,resultList,imageLinks),
+                                onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CourseInfoScreen(
+                                      userId: widget.userId,
+                                      collegeId: resultList[index].collegeId,
+                                      courseName: resultList[index].courseName,
+                                    ),
+                                  ),
+                                );
+                              },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Card(
+                  elevation: 2.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
+                          child: Text(
+                            'Courses',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontFamily: kQuicksand,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30.0
+                            ),
+                          ),
+                        ),
+                        Divider(color: Theme.of(context).accentColor,height: 1.0,),
+                        GridView.builder(
+                          controller: ScrollController(
+                            keepScrollOffset: false,
+                          ),
+                          shrinkWrap: true,
+                          itemCount: courseButtons.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 2.5,
+                          ),
+                          itemBuilder: (BuildContext context, int index){
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: courseButtons[index],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 2.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
+                          child: Text(
+                            'Institutes',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontFamily: kQuicksand,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30.0
+                            ),
+                          ),
+                        ),
+                        Divider(color: Theme.of(context).accentColor,height: 1.0,),
+                        GridView.builder(
+                          controller: ScrollController(
+                            keepScrollOffset: false,
+                          ),
+                          shrinkWrap: true,
+                          itemCount: instituteList.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 1),
+                          itemBuilder: (BuildContext context,int index){
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: instituteList[index],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 2.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
+                          child: Text(
+                            'Exams',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontFamily: kQuicksand,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30.0
+                            ),
+                          ),
+                        ),
+                        Divider(color: Theme.of(context).accentColor,height: 1.0,),
+                        GridView.builder(
+                          controller: ScrollController(
+                            keepScrollOffset: false,
+                          ),
+                          shrinkWrap: true,
+                          itemCount: examButtons.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 2,
+                          ),
+                          itemBuilder: (BuildContext context, int index){
+                            return Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: examButtons[index],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

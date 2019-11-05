@@ -8,9 +8,10 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class SearchScreen extends StatefulWidget{
 
-  SearchScreen({@required this.userId,this.instituteSearch=false});
+  SearchScreen({@required this.userId,this.instituteSearch=false,this.search=''});
   final int userId;
   final bool instituteSearch;
+  final String search;
   @override
   SearchScreenState createState() {
     return SearchScreenState();
@@ -24,6 +25,7 @@ class SearchScreenState extends State<SearchScreen>{
   NetworkHandler networkHandler;
   int _userId;
   bool instituteSearch;
+  String searchDate;
 
   @override
   void initState() {
@@ -31,82 +33,16 @@ class SearchScreenState extends State<SearchScreen>{
     instituteSearch = widget.instituteSearch;
     this._userId = widget.userId;
     networkHandler = NetworkHandler();
+    if(widget.search != ''){
+      _responseBody = _getSearchDetail(widget.search);
+      _text = widget.search;
+    }
   }
 
   Future _getSearchDetail(String search)async{
     //returns search query result as Future object
     return widget.instituteSearch?await networkHandler.getInstituteSearchResult(search): await networkHandler.getSearchResult(search);
   }
-
-  Future _getOptions()async{
-    //returns list of all courses as Future object
-    return widget.instituteSearch?await networkHandler.getAllInstitutes():await networkHandler.getAllCourses();
-  }
-
-  //Bottom sheet builder
-  Widget bottomSheetBuilder(){
-    return Padding(
-      padding: EdgeInsets.only(top: 20.0),
-      child: Container(
-        width: double.infinity,
-        height: 300.0,
-        child: FutureBuilder(
-          future: _getOptions(),
-          builder: (context,snapshot){
-
-            if(!snapshot.hasData){
-              return Center(child: CircularProgressIndicator(),);
-            }
-            var list = snapshot.data;
-            List<BottomSheetButton> resultList = [];
-
-            if(widget.instituteSearch){
-              for(var item in list){
-                resultList.add(
-                    BottomSheetButton(
-                      text: item[kCollegeName],
-                      onPressed: (){
-                        _responseBody = _getSearchDetail(item[kCollegeId]);
-                        setState(() {
-                          _text = item[kCollegeName];
-                          Navigator.pop(context);
-                        });
-                      },
-                    )
-                );
-              }
-            }
-            if(!widget.instituteSearch){
-              for(Map item in list){
-                resultList.add(
-                    BottomSheetButton(
-                      text: item[kCourseName],
-                      onPressed: (){
-                        _responseBody = _getSearchDetail(item[kCourseId]);
-                        setState(() {
-                          _text = item[kCourseName];
-                          Navigator.pop(context);
-                        });
-                      },
-                    )
-                );
-              }
-            }
-
-            //Bottom sheet button builder
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: resultList.length,
-                itemBuilder: (BuildContext context,index){
-                  return resultList[index];
-                });
-          },
-        ),
-      ),
-    );
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +77,6 @@ class SearchScreenState extends State<SearchScreen>{
                   child: TextField(
                     onSubmitted: (String value)async{
                       _text = value;
-                      //TODO: implement search
                       _responseBody = _getSearchDetail(_text);
                     },
                     cursorColor: Theme.of(context).accentColor,
@@ -181,7 +116,7 @@ class SearchScreenState extends State<SearchScreen>{
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Icon(
-                        Icons.error_outline,
+                        MaterialCommunityIcons.wifi_strength_off_outline,
                         color: Theme.of(context).accentColor,
                         size: 150.0,
                       ),
@@ -233,16 +168,27 @@ class SearchScreenState extends State<SearchScreen>{
                 return Center(
                   child: Column(
                     children: <Widget>[
+                      SizedBox(height: 20.0,),
                       Icon(
-                        Icons.error_outline,
+                        MaterialCommunityIcons.cloud_search_outline,
                         color: Theme.of(context).accentColor,
                         size: 150.0,
                       ),
+                      SizedBox(height: 20.0,),
                       Text(
-                        "No Data available",
+                        "No Result",
                         style: TextStyle(
                           fontFamily: kQuicksand,
-                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30.0,
+                        ),
+                      ),
+                      Text(
+                        "Try amore general keyword",
+                        style: TextStyle(
+                          fontFamily: kQuicksand,
+                          //fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
                         ),
                       ),
                     ],
@@ -253,7 +199,7 @@ class SearchScreenState extends State<SearchScreen>{
 
                 for(Map item in list){
                   resultList.add(ResultTile(
-                    collegeId: item[kCollgeID],
+                    collegeId: item[kCollegeId],
                     iconLink: item[kCollegeIconLink],
                     collegeName: item[kCollegeName],
                     courseName: !widget.instituteSearch?item[kCourseName]:null,

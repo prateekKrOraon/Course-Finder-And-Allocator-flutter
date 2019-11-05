@@ -24,7 +24,6 @@ const kCourseName = 'course_name';
 const kCourseDetail = 'course_detail';
 const kCourseCost = 'cost';
 const kCollegeLocation = 'location';
-const kCollgeID = 'college_id';
 const kCollegeId = 'college_id';
 const kCourseId = 'course_id';
 const kMinQual = 'min_qual';
