@@ -268,7 +268,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>{
                           padding: EdgeInsets.symmetric(vertical: 12.0),
 
                           child: waiting? CircularProgressIndicator():Text(
-                            "Fix an interview",
+                            "Apply Now",
                             style: TextStyle(
                               fontFamily: kQuicksand,
                               fontSize: 30.0,

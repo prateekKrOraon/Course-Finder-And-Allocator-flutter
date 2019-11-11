@@ -26,6 +26,7 @@ class _InputUserDetailState extends State<InputUserDetail>{
   String _selectedDate = "Click to select";
   Map _responseBody;
   bool _showSpinner = false;
+  String _emailId;
 
   NetworkHandler networkHandler = NetworkHandler();
 
@@ -72,6 +73,12 @@ class _InputUserDetailState extends State<InputUserDetail>{
       list.add(DropdownMenuItem(child: Text(item),value: item,));
     }
     return list;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _emailId = widget.email;
   }
 
   @override
@@ -165,7 +172,7 @@ class _InputUserDetailState extends State<InputUserDetail>{
                 child: CustomRaisedButton(
                   text: "Confirm",
                   onPressed: ()async{
-                    _responseBody = await networkHandler.sendUserDetails(_fullName, _phone, _city, _selectedQual, _selectedDate);
+                    _responseBody = await networkHandler.sendUserDetails(_emailId,_fullName, _phone, _city, _selectedQual, _selectedDate);
                     if(!_responseBody[kError]){
                       await saveToSharedPref(true);
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),(route)=>false);

@@ -11,7 +11,7 @@ class CourseFinder extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
         primaryColor: Colors.orange[800],
-        accentColor: Colors.orange[600]
+        accentColor: Colors.orange[600],
       ),
       home: LoginScreen(),
     );

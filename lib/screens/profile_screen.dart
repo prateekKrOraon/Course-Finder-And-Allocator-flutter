@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class ProfileScreen extends StatefulWidget{
+
+  ProfileScreen({this.userId});
+  final userId;
+
   @override
   ProfileScreenState createState() {
     return ProfileScreenState();
@@ -19,16 +23,18 @@ class ProfileScreenState extends State<ProfileScreen>{
 
   Future userDetails;
   NetworkHandler networkHandler;
+  int _userId;
 
   @override
   void initState() {
     super.initState();
+    _userId = widget.userId;
     networkHandler = NetworkHandler();
     this.userDetails = getUserDetails();
   }
 
   Future getUserDetails() async {
-    return await networkHandler.getUserDetails();
+    return await networkHandler.getUserDetails(_userId.toString());
   }
 
   @override

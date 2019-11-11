@@ -59,7 +59,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
     openController.forward();
   }
 
-  _menuHandler(){
+    _menuHandler(){
     openController.reset();
     openController.forward();
   }
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
       Dashboard(userId: _userId,),
       SearchScreen(userId: _userId,instituteSearch: _instituteSearch,search: searchData,),
       AllocatedCourses(userId: _userId,),
-      ProfileScreen(),
+      ProfileScreen(userId: _userId,),
     ];
     searchData = '';
     final _kBottomNavBarItems = <BottomNavigationBarItem>[
@@ -141,6 +141,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
               await prefs.setBool(kLoggedIn, false);
               await prefs.setInt(kUserID, 0);
               await prefs.setString(kEmailId,'');
+              await prefs.clear();
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context)=>LoginScreen()),

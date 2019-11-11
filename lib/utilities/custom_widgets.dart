@@ -189,12 +189,14 @@ class TextListTile extends StatelessWidget{
                   fontSize: 18.0,
                 ),
               ),
-              Text(
-                trailing,
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                  fontSize: 15.0,
-                  fontFamily: kNotoSansSC,
+              Expanded(
+                child: Text(
+                  trailing,
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    fontFamily: kNotoSansSC,
+                  ),
                 ),
               ),
             ],
@@ -621,6 +623,7 @@ class CustomDashboardChips extends StatelessWidget{
         padding: const EdgeInsets.symmetric(vertical:5.0,horizontal: 10.0),
         child: Text(
           text,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: kQuicksand,
             fontSize: 20.0
@@ -628,7 +631,6 @@ class CustomDashboardChips extends StatelessWidget{
         ),
       ),
       onPressed: (){
-        //TODO
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Home(screenNumber: 1,searchData: text,userId: userId,)));
       },
     );
