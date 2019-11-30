@@ -1,4 +1,3 @@
-import 'package:course_finder/screens/home_screen.dart';
 import 'package:course_finder/services/network_handler.dart';
 import 'package:course_finder/utilities/constants.dart';
 import 'package:course_finder/utilities/custom_widgets.dart';
@@ -6,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'login_screen.dart';
 
 class InputUserDetail extends StatefulWidget{
 
@@ -30,10 +30,6 @@ class _InputUserDetailState extends State<InputUserDetail>{
 
   NetworkHandler networkHandler = NetworkHandler();
 
-  saveToSharedPref(bool filledDetails)async{
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(widget.email, true);
-  }
 
   _selectDate(BuildContext context) async {
     DateTime selectedDate = DateTime.now();
@@ -174,8 +170,8 @@ class _InputUserDetailState extends State<InputUserDetail>{
                   onPressed: ()async{
                     _responseBody = await networkHandler.sendUserDetails(_emailId,_fullName, _phone, _city, _selectedQual, _selectedDate);
                     if(!_responseBody[kError]){
-                      await saveToSharedPref(true);
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Home()),(route)=>false);
+                      //await saveToSharedPref(true);
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()),(route)=>false);
                     }else{
                       setState(() {
                         _showSpinner = false;

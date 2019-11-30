@@ -4,7 +4,6 @@ import 'package:course_finder/utilities/constants.dart';
 import 'package:course_finder/utilities/custom_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class SignUpScreen extends StatefulWidget{
@@ -25,10 +24,10 @@ class _SignUpScreenState extends State<SignUpScreen>{
 
   NetworkHandler networkHandler = NetworkHandler();
 
-  saveToSharedPref(String email)async{
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(kEmailId, kEmailId);
-  }
+//  saveToSharedPref(String email)async{
+//    final prefs = await SharedPreferences.getInstance();
+//    await prefs.setString(kEmailId, kEmailId);
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen>{
                       }else{
                         _responseBody = await networkHandler.signUpUser(_email, _password);
                         if(!_responseBody[kError]){
-                          await saveToSharedPref(_email);
+                          //await saveToSharedPref(_email);
                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>InputUserDetail(email:_email,)),(route)=>false);
                         }else{
                           setState(() {
@@ -133,5 +132,4 @@ class _SignUpScreenState extends State<SignUpScreen>{
       ),
     );
   }
-
 }
