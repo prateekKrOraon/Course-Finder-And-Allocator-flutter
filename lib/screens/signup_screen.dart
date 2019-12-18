@@ -94,9 +94,15 @@ class _SignUpScreenState extends State<SignUpScreen>{
                           action: SnackBarAction(label: 'OK', onPressed: (){},),
                         ));
                       }else{
+                        setState(() {
+                          showSpinner = true;
+                        });
                         _responseBody = await networkHandler.signUpUser(_email, _password);
                         if(!_responseBody[kError]){
                           //await saveToSharedPref(_email);
+                          setState(() {
+                            showSpinner = false;
+                          });
                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>InputUserDetail(email:_email,)),(route)=>false);
                         }else{
                           setState(() {

@@ -76,8 +76,10 @@ class SearchScreenState extends State<SearchScreen>{
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     onSubmitted: (String value)async{
-                      _text = value;
-                      _responseBody = _getSearchDetail(_text);
+                      setState(() {
+                        _text = value;
+                        _responseBody = _getSearchDetail(_text);
+                      });
                     },
                     cursorColor: Theme.of(context).accentColor,
                     decoration: InputDecoration(

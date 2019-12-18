@@ -168,8 +168,14 @@ class _InputUserDetailState extends State<InputUserDetail>{
                 child: CustomRaisedButton(
                   text: "Confirm",
                   onPressed: ()async{
+                    setState(() {
+                      _showSpinner = true;
+                    });
                     _responseBody = await networkHandler.sendUserDetails(_emailId,_fullName, _phone, _city, _selectedQual, _selectedDate);
                     if(!_responseBody[kError]){
+                      setState(() {
+                        _showSpinner = false;
+                      });
                       //await saveToSharedPref(true);
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()),(route)=>false);
                     }else{

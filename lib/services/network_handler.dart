@@ -11,7 +11,7 @@ class NetworkHandler{
   Future<Map> loginUser(String email,String password) async {
     Map send = {
       kEmailId:email,
-      kEmailId:password,
+      kPassword:password,
     };
     String url = '$_globalURL/loginRequest.php';
     var res = await http.post(url,headers: _header,body: send);
@@ -25,7 +25,7 @@ class NetworkHandler{
 
     Map send = {
       kEmailId:email,
-      kEmailId:password,
+      kPassword:password,
     };
 
     String _url = '$_globalURL/registerUser.php';

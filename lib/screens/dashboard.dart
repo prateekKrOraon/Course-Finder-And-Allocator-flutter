@@ -90,20 +90,20 @@ class _DashboardState extends State<Dashboard>{
       ),
     ];
 
-    List<CustomDashboardTile> instituteList = [
-      CustomDashboardTile(
-        text: 'NITs',
-      ),
-      CustomDashboardTile(
-        text: 'IITs',
-      ),
-      CustomDashboardTile(
-        text: 'IIMs',
-      ),
-      CustomDashboardTile(
-        text: 'AIIMS',
-      ),
-    ];
+//    List<CustomDashboardTile> instituteList = [
+//      CustomDashboardTile(
+//        text: 'NITs',
+//      ),
+//      CustomDashboardTile(
+//        text: 'IITs',
+//      ),
+//      CustomDashboardTile(
+//        text: 'IIMs',
+//      ),
+//      CustomDashboardTile(
+//        text: 'AIIMS',
+//      ),
+//    ];
 
     List<CustomDashboardChips> examButtons = [
       CustomDashboardChips(
@@ -269,44 +269,44 @@ class _DashboardState extends State<Dashboard>{
                     ),
                   ),
                 ),
-                Card(
-                  elevation: 2.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
-                          child: Text(
-                            'Institutes',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontFamily: kQuicksand,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30.0
-                            ),
-                          ),
-                        ),
-                        Divider(color: Theme.of(context).accentColor,height: 1.0,),
-                        GridView.builder(
-                          controller: ScrollController(
-                            keepScrollOffset: false,
-                          ),
-                          shrinkWrap: true,
-                          itemCount: instituteList.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 1),
-                          itemBuilder: (BuildContext context,int index){
-                            return Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: instituteList[index],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+//                Card(
+//                  elevation: 2.0,
+//                  child: Padding(
+//                    padding: const EdgeInsets.all(8.0),
+//                    child: Column(
+//                      crossAxisAlignment: CrossAxisAlignment.stretch,
+//                      children: <Widget>[
+//                        Padding(
+//                          padding: EdgeInsets.only(top: 2.0,bottom: 10.0),
+//                          child: Text(
+//                            'Institutes',
+//                            textAlign: TextAlign.start,
+//                            style: TextStyle(
+//                                fontFamily: kQuicksand,
+//                                fontWeight: FontWeight.bold,
+//                                fontSize: 30.0
+//                            ),
+//                          ),
+//                        ),
+//                        Divider(color: Theme.of(context).accentColor,height: 1.0,),
+//                        GridView.builder(
+//                          controller: ScrollController(
+//                            keepScrollOffset: false,
+//                          ),
+//                          shrinkWrap: true,
+//                          itemCount: instituteList.length,
+//                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 1),
+//                          itemBuilder: (BuildContext context,int index){
+//                            return Padding(
+//                              padding: EdgeInsets.all(8.0),
+//                              child: instituteList[index],
+//                            );
+//                          },
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                ),
                 Card(
                   elevation: 2.0,
                   child: Padding(

@@ -37,26 +37,30 @@ class _LoginScreenState extends State<LoginScreen>{
     String emailId = prefs.getString(kEmailId);
     bool filledDetails = prefs.getBool(emailId);
     bool loggedIn = await isLoggedIn();
-    if(loggedIn !=null && loggedIn){
-      if(filledDetails != null && !filledDetails){
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => InputUserDetail(),
-          ),
-              (route)=>false,
-        );
-      }else{
-        int userId = prefs.getInt(kUserID);
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home(userId: userId,)
-          ),
-              (root)=>false,
-        );
-      }
+    if(loggedIn != null && loggedIn){
+      int userId = prefs.getInt(kUserID);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Home(userId: userId,)), (route)=>false);
     }
+//    if(loggedIn !=null && loggedIn){
+//      if(filledDetails != null && !filledDetails){
+//        Navigator.pushAndRemoveUntil(
+//          context,
+//          MaterialPageRoute(
+//            builder: (context) => InputUserDetail(),
+//          ),
+//              (route)=>false,
+//        );
+//      }else{
+//        int userId = prefs.getInt(kUserID);
+//        Navigator.pushAndRemoveUntil(
+//          context,
+//          MaterialPageRoute(
+//              builder: (context) => Home(userId: userId,)
+//          ),
+//              (root)=>false,
+//        );
+//      }
+//    }
   }
 
   Future<bool> isLoggedIn()async{
@@ -129,9 +133,14 @@ class _LoginScreenState extends State<LoginScreen>{
                           responseBody = await networkHandler.loginUser(email, password);
                           if(!responseBody[kError]) {
                             showSpinner = false;
-                            await saveToSharedPref(true,responseBody[kUserID],email);
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (
-                                context) => Home(userId: responseBody[kUserID],)),(rout)=>false);
+                            if(responseBody[kFullName] == null){
+                              await saveToSharedPref(false, responseBody[kUserID], email);
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>InputUserDetail(email: responseBody[kEmailId],)),(route) => false);
+                            }else{
+                              await saveToSharedPref(true,responseBody[kUserID],email);
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (
+                                  context) => Home(userId: responseBody[kUserID],)),(rout)=>false);
+                            }
                           }else{
                             setState(() {
                               showSpinner = false;
